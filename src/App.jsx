@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, PieChart, Pie, Cell
+} from 'recharts';
 
 // 原生 SVG 圖示元件
 const Icons = {
@@ -260,6 +264,9 @@ export default function App() {
     direction: 'asc'
   });
 
+  // 分頁狀態
+  const [activeTab, setActiveTab] = useState('table');
+
   // 提取選項清單
   const uniqueGroups = [...new Set(rawData.map(item => item.group))];
   const uniqueCategories = [...new Set(rawData.map(item => item.category))];
@@ -330,6 +337,77 @@ export default function App() {
 
     return { totalAwards, uniqueProjects, topSchool, maxCount };
   }, [filteredData]);
+
+  // 圖表 1:各組別 × 獎項 堆疊長條圖資料
+  const chartGroupAward = useMemo(() => {
+    const awardOrder = ['特優', '優等', '佳作', '探究精神獎', '團隊合作獎', '鄉土教材獎', '參展'];
+    return uniqueGroups.map(g => {
+      const row = { group: g };
+      awardOrder.forEach(a => {
+        row[a] = filteredData.filter(d => d.group === g && d.award === a).length;
+      });
+      return row;
+    });
+  }, [filteredData, uniqueGroups]);
+
+  // 圖表 2:各科別得獎數(排除「參展」)
+  const chartCategoryCount = useMemo(() => {
+    const counts = {};
+    filteredData.forEach(d => {
+      if (d.award !== '參展') {
+        counts[d.category] = (counts[d.category] || 0) + 1;
+      }
+    });
+    return Object.entries(counts)
+      .map(([category, count]) => ({ category, count }))
+      .sort((a, b) => b.count - a.count);
+  }, [filteredData]);
+
+  // 圖表 3:獲獎前 10 名學校(排除「參展」)
+  const chartTopSchools = useMemo(() => {
+    const counts = {};
+    filteredData.forEach(d => {
+      if (d.award !== '參展') {
+        counts[d.school] = (counts[d.school] || 0) + 1;
+      }
+    });
+    return Object.entries(counts)
+      .map(([school, count]) => ({ school, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  }, [filteredData]);
+
+  // 圖表 4:獎項分布圓餅(排除「參展」)
+  const chartAwardPie = useMemo(() => {
+    const counts = {};
+    filteredData.forEach(d => {
+      if (d.award !== '參展') {
+        counts[d.award] = (counts[d.award] || 0) + 1;
+      }
+    });
+    return Object.entries(counts).map(([name, value]) => ({ name, value }));
+  }, [filteredData]);
+
+  // 全國代表作品清單
+  const nationalList = useMemo(() => {
+    const seen = new Set();
+    return filteredData.filter(d => {
+      if (!d.isNational) return false;
+      if (seen.has(d.id)) return false;
+      seen.add(d.id);
+      return true;
+    });
+  }, [filteredData]);
+
+  const awardColors = {
+    '特優': '#eab308',
+    '優等': '#3b82f6',
+    '佳作': '#10b981',
+    '探究精神獎': '#8b5cf6',
+    '團隊合作獎': '#ec4899',
+    '鄉土教材獎': '#f97316',
+    '參展': '#9ca3af'
+  };
 
   const SortIconComponent = ({ columnKey }) => {
     if (sortConfig.key !== columnKey) return <Icons.ArrowUpDown className="w-3.5 h-3.5 ml-1 text-gray-400 opacity-50 shrink-0" />;
@@ -441,7 +519,127 @@ export default function App() {
           </div>
         </div>
 
+        {/* --- 分頁切換 --- */}
+        <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 inline-flex gap-2">
+          <button
+            onClick={() => setActiveTab('table')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+              activeTab === 'table' ? 'bg-blue-600 text-white shadow' : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            資料表格
+          </button>
+          <button
+            onClick={() => setActiveTab('charts')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+              activeTab === 'charts' ? 'bg-blue-600 text-white shadow' : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            圖表統計
+          </button>
+        </div>
+
+        {activeTab === 'charts' && (
+          <div className="space-y-6">
+            {/* 全國代表概覽 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                <Icons.Trophy className="w-5 h-5 text-red-500 mr-2" />
+                全國代表作品 ({nationalList.length} 件)
+              </h2>
+              {nationalList.length > 0 ? (
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {nationalList.map(item => (
+                    <li key={item.id} className="p-3 bg-red-50 border border-red-100 rounded-lg">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="px-2 py-0.5 rounded text-xs font-medium bg-white border border-red-200 text-red-700">{item.group}</span>
+                        <span className="text-xs text-gray-500">{item.category}</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-900 leading-snug">{item.title}</p>
+                      <p className="text-xs text-gray-500 mt-1">{item.school}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-400">目前篩選條件下無全國代表作品</p>
+              )}
+            </div>
+
+            {/* 各組別 × 獎項堆疊圖 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">各組別獎項分布</h2>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={chartGroupAward}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="group" tick={{ fontSize: 13 }} />
+                  <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+                  <Tooltip contentStyle={{ borderRadius: 8, fontSize: 13 }} />
+                  <Legend wrapperStyle={{ fontSize: 13 }} />
+                  {['特優', '優等', '佳作', '探究精神獎', '團隊合作獎', '鄉土教材獎', '參展'].map(a => (
+                    <Bar key={a} dataKey={a} stackId="award" fill={awardColors[a]} />
+                  ))}
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* 各科別得獎數 */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">各科別得獎數</h2>
+                <ResponsiveContainer width="100%" height={320}>
+                  <BarChart data={chartCategoryCount} layout="vertical" margin={{ left: 40 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                    <YAxis type="category" dataKey="category" tick={{ fontSize: 12 }} width={140} />
+                    <Tooltip contentStyle={{ borderRadius: 8, fontSize: 13 }} />
+                    <Bar dataKey="count" fill="#3b82f6" radius={[0, 6, 6, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* 獎項分布圓餅 */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">獎項類型占比(不含參展)</h2>
+                <ResponsiveContainer width="100%" height={320}>
+                  <PieChart>
+                    <Pie
+                      data={chartAwardPie}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={110}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {chartAwardPie.map((entry) => (
+                        <Cell key={entry.name} fill={awardColors[entry.name] || '#9ca3af'} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: 8, fontSize: 13 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* 獲獎前 10 名學校 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">獲獎前 10 名學校(不含參展)</h2>
+              <ResponsiveContainer width="100%" height={Math.max(300, chartTopSchools.length * 36)}>
+                <BarChart data={chartTopSchools} layout="vertical" margin={{ left: 40 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="school" tick={{ fontSize: 11 }} width={220} />
+                  <Tooltip contentStyle={{ borderRadius: 8, fontSize: 13 }} />
+                  <Bar dataKey="count" fill="#10b981" radius={[0, 6, 6, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
         {/* --- 資料表格區塊 --- */}
+        {activeTab === 'table' && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px] table-fixed">
@@ -529,6 +727,7 @@ export default function App() {
             顯示 {sortedData.length} 筆紀錄
           </div>
         </div>
+        )}
 
       </div>
     </div>
