@@ -147,7 +147,7 @@ const authorData = {
   '030111': { authors: '秋禹岑、周昀橙、楊晰和', teachers: '吳浩誠、黃御庭' },
   '030112': { authors: '江睿岑、陳立洋、秦南一', teachers: '李義德' },
   '030201': { authors: '姜斌樵、譚翊彤、宮政晴', teachers: '李佳勳、吳如萍' },
-  '030202': { authors: '魏連翰、魏連福', teachers: '林祚、林宜姍' },
+  '030202': { authors: '魏連翰、魏連福', teachers: '李嘉文、林宜嫻' },
   '030203': { authors: '游則安、陳廷任', teachers: '吳欣桓' },
   '030204': { authors: '廖朱丞、洪子祥、廖朱浩', teachers: '許瑋航、余任厚' },
   '030301': { authors: '吳丹、洪子涵、陳微安', teachers: '林建廷、沈志強' },
