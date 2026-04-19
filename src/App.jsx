@@ -131,6 +131,96 @@ const MultiSelect = ({ options, selected, onChange, searchPlaceholder = false })
   );
 };
 
+// 作者與指導老師(以編號 id 對應)
+const authorData = {
+  // 國中
+  '030101': { authors: '鄭宇晴、吳宥蓉', teachers: '黃俊嘉' },
+  '030102': { authors: '魏津碩、林晨澔、蔡潤中', teachers: '賴麗姝、賴忻旻' },
+  '030103': { authors: '李以瑀、洪晟樺', teachers: '陳家齊' },
+  '030104': { authors: '張竣嚴、曾佐恩、徐宏陞', teachers: '黃俊嘉' },
+  '030105': { authors: '吳宸軒、鄭鈞學、盧苡葦', teachers: '陳建維' },
+  '030106': { authors: '梁祐穎', teachers: '曾方琪、蘇畇喻' },
+  '030107': { authors: '吳昱辰、黃程瀚、方艷如', teachers: '陳家彬' },
+  '030108': { authors: '李宥丞、蔡筠筠', teachers: '陳家彬' },
+  '030109': { authors: '吳禹橙、裘卉蓉', teachers: '曾方琪' },
+  '030110': { authors: '藍嶼、陳恩樂、洪和晴', teachers: '沈芯強、簡子宏' },
+  '030111': { authors: '秋禹岑、周昀橙、楊晰和', teachers: '林浩誌、黃御庭' },
+  '030112': { authors: '江睿岑、陳立洋、秦南一', teachers: '李義德' },
+  '030201': { authors: '姜斌樵、譚翊彤、宮政晴', teachers: '林佳德、吳學霖' },
+  '030202': { authors: '魏連翰、魏連福', teachers: '林祚、林宜姍' },
+  '030203': { authors: '游則安、陳廷任', teachers: '吳欣桓' },
+  '030204': { authors: '廖朱丞、洪子祥、廖朱浩', teachers: '許靖誠、保任安' },
+  '030301': { authors: '吳丹、洪子涵、陳微安', teachers: '林建廷、沈芯強' },
+  '030302': { authors: '衡映潔、吳宜君、魏芷欣', teachers: '陳昱華、吳宜廷' },
+  '030303': { authors: '魏祟樺、田景禾、尤浩一', teachers: '諶詠仁、邱麗芬' },
+  '030304': { authors: '李書萊、陳和學、許亦漾', teachers: '吳鳴貴、陳信璋' },
+  '030305': { authors: '尤志楷、林亞樺', teachers: '邱麗芬、吳宜廷' },
+  '030401': { authors: '陳以宸、陳和文', teachers: '張意函、黃藝莊' },
+  '030402': { authors: '歐憲誌', teachers: '陳勛、何保賢' },
+  '030403': { authors: '方劭茗、蔡宜豪', teachers: '蘇彥、朱江翰' },
+  '030404': { authors: '李秋澤、宋亮靚', teachers: '覺天容、李宥安' },
+  '030405': { authors: '藍苡潔、吳子維', teachers: '何唯欣、賴映晴' },
+  '030406': { authors: '林佳諭、藍忻儀、陳奏璇', teachers: '吳修箏、康淇華' },
+  '030407': { authors: '林安涵、譚浩源、陳翊', teachers: '何唯欣、賴映晴' },
+  '030501': { authors: '李泳逸、張庭宇、張翔寧', teachers: '蕭霓桑、陳鈴筑' },
+  '030502': { authors: '李沛宸、衡安一、李德楊', teachers: '陳信璋、吳鳴貴' },
+  '030503': { authors: '廖禹翔、黃科渝', teachers: '陳信宏' },
+  '030801': { authors: '衡秋嶸、梅子燐', teachers: '劉德嫻' },
+  '030802': { authors: '蘇安宸、蘇宸謙', teachers: '黃斯筠、方宣蓉' },
+  '030803': { authors: '吳侑岑、蕭秋彥、盛泓寧', teachers: '保任安、許靖誠' },
+  '030804': { authors: '黃祐昀、李大康', teachers: '劉苦暘' },
+  '030805': { authors: '李安騰、吳瑋桓、曾晉廷', teachers: '許苡寧、楊源豪' },
+  '030806': { authors: '陳彥章、曾云宸、曾顥彥', teachers: '劉子禾' },
+  '030807': { authors: '李安樺、蘇子彥、游宸宇', teachers: '陳榮政、沈芯強' },
+  '030901': { authors: '陳艾澤、徐楊豢、謝雪涵', teachers: '吳宜妍、徐霈琪' },
+  '030902': { authors: '簡妤庭、汪姵瑜、李秋軒', teachers: '林修昱、康瑋展' },
+  '030903': { authors: '陳苡綸、陳乃苡、林立柏', teachers: '賴映晴' },
+  '030904': { authors: '蘇永洋、李品安', teachers: '邱懷彬、潘品安' },
+  '031001': { authors: '張翊潔、方妤珊、李諼庭', teachers: '劉子禾' },
+  '031002': { authors: '陳奕溱、魏翊妤', teachers: '邱懷彬、潘品安' },
+  '031003': { authors: '楊晨橙、潘宥儒', teachers: '何保賢、沈子涵' },
+  '031004': { authors: '李宥安、汪勁瀚、賴夢蓉', teachers: '方魯英' },
+  // 國小
+  '080101': { authors: '賴沐柔、李妤妡、簡辰薇、邱祈廷、謝宥安', teachers: '陳暉、吳思宥' },
+  '080102': { authors: '陳佐廷', teachers: '林慧宸、陳建淳' },
+  '080201': { authors: '李奕賢、程昀修', teachers: '譚宥翔' },
+  '080202': { authors: '陳侑樺、李東橙、黃祥筑', teachers: '陳庭庚、吳佳穎' },
+  '080203': { authors: '吳桓、吳昱涵、李宥均、高子耕', teachers: '李澄賢、李明志' },
+  '080204': { authors: '陳柏安、黃鈺崙、張定涵、張銘媞、彭依樺、陳宥廷', teachers: '裘雅保' },
+  '080205': { authors: '蘇士穎、吳姈姈、蕭揚圻、李安瑀、李念軒', teachers: '吳思宥、陳暉' },
+  '080206': { authors: '張家誌、李俞伶、鞠姿云', teachers: '何侑樟' },
+  '080207': { authors: '周朗誠、游竣瑋、陳侑樂、張和碩', teachers: '楊晨憶' },
+  '080208': { authors: '謝紫丹、潘安竣、李義峯', teachers: '魏甫萱' },
+  '080301': { authors: '黃翊巧', teachers: '江靖茹' },
+  '080302': { authors: '吳翊維、楊晟泓、游諺誌', teachers: '吳佳恩、游馥亦' },
+  '080303': { authors: '黃永朵、古易廷、吳錢麒、陳亭妤、石迦石', teachers: '陳苡蓁、李澄賢' },
+  '080304': { authors: '李昊澤、陳蓁悅', teachers: '吳和耕、李宥廷' },
+  '080305': { authors: '陳伶頤、李方桓、黃鈺均、李宥璃、楊旭濠', teachers: '楊槿溧' },
+  '080401': { authors: '李安晉', teachers: '吳思宥' },
+  '080402': { authors: '游竣昊、彭向晨、李尚治', teachers: '詹思豪、吳天晴' },
+  '080403': { authors: '張芸豆、謝庭豊、賴宥讀、謝佩瑩', teachers: '邱麗芬、諶詠仁' },
+  '080501': { authors: '吳芸安', teachers: '黃斯筠、李秋蓉' },
+  '080502': { authors: '黃柔瑢、吳承衡、羅容筠、徐若諭、黃品苡', teachers: '黃祈珺、游種和' },
+  '080503': { authors: '衡簡麗、張耘綸、方詠菲、陳竣豪、薩昊喻', teachers: '陳蘊文、李宜伶' },
+  '080504': { authors: '錢崇加、李宥辰、錢楷中', teachers: '李丞麟' },
+  '080801': { authors: '陳和陞、毓昕尹、李曜昕、吳蘊淳、李信安', teachers: '賴玟妤、魏劭妤' },
+  '080802': { authors: '黃子洋、黃子騰、謝佳廷', teachers: '吳芸芸' },
+  '080803': { authors: '余淞橙、宋祈妤、游子禾', teachers: '邱牧修' },
+  '080804': { authors: '簡廷安', teachers: '陳玟華、李秋甫' },
+  '080805': { authors: '桑叡橙', teachers: '陳玟華' },
+  '080901': { authors: '周之彤、汪蕎妤、黃若綺', teachers: '楊陽寬' },
+  '080902': { authors: '江宸愷、黃尹豆、伯諺樺', teachers: '王育婷、楊安璃' },
+  '080903': { authors: '李睿晴、陳昊樺、李楊', teachers: '李仲崑、李和涵' },
+  '080904': { authors: '吳彩伶、游子洋、游源機、吳品廷', teachers: '萬富國小' },
+  '080905': { authors: '余三軒、衡三樺、駱亭妤、徐鈺範', teachers: '謝宗賢、蘇鈺範' },
+  '080906': { authors: '陳蘊祈', teachers: '吳宜妍、陳琦佩' },
+  '080907': { authors: '蘇來昊、李心昊、龐來諺、蘇苡茹、張子宏', teachers: '衡小滿、李森華' },
+  '080908': { authors: '廖翊伶', teachers: '黃斯筠、楊虹紜' },
+  '081001': { authors: '魏劭妤、晏邑橙、甲立加、廖禹澤', teachers: '李丞麟' },
+  '081002': { authors: '廖彥軒、蘇嶸宸、李晰蓁、李楊佳、張芸碩', teachers: '王育婷、楊安璃' },
+  '081003': { authors: '許顥崙、魏紫寬', teachers: '李子風' },
+};
+
 // 完整資料集
 const rawData = [
   // === 國小組 ===
@@ -642,7 +732,7 @@ export default function App() {
         {activeTab === 'table' && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[800px] table-fixed">
+            <table className="w-full text-left border-collapse min-w-[1100px] table-fixed">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm">
                   {/* 強制固定前四欄的寬度 */}
@@ -664,6 +754,12 @@ export default function App() {
                   </th>
                   <th className="p-3 w-auto cursor-pointer hover:bg-gray-200 transition-colors" onClick={() => requestSort('title')}>
                     <div className="flex items-center">作品題目 <SortIconComponent columnKey="title" /></div>
+                  </th>
+                  <th className="p-3 min-w-[160px] w-[180px]">
+                    <div className="flex items-center">作者</div>
+                  </th>
+                  <th className="p-3 min-w-[120px] w-[140px]">
+                    <div className="flex items-center">指導老師</div>
                   </th>
                 </tr>
               </thead>
@@ -708,11 +804,17 @@ export default function App() {
                           )}
                         </div>
                       </td>
+                      <td className="p-3 text-gray-700 text-sm leading-snug break-words">
+                        {authorData[item.id]?.authors || '—'}
+                      </td>
+                      <td className="p-3 text-gray-700 text-sm leading-snug break-words">
+                        {authorData[item.id]?.teachers || '—'}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="p-12 text-center text-gray-400">
+                    <td colSpan="8" className="p-12 text-center text-gray-400">
                       <div className="flex flex-col items-center justify-center">
                         <Icons.Search className="w-12 h-12 text-gray-300 mb-4" />
                         <p>找不到符合條件的資料，請嘗試放寬多重篩選的設定。</p>
