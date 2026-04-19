@@ -681,7 +681,7 @@ export default function App() {
                           {item.group}
                         </span>
                       </td>
-                      <td className="p-3 text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis" title={item.category}>
+                      <td className="p-3 text-gray-700 break-words leading-snug" title={item.category}>
                         {item.category}
                       </td>
                       <td className="p-3 whitespace-nowrap">
