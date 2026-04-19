@@ -576,7 +576,7 @@ export default function App() {
                   <Tooltip contentStyle={{ borderRadius: 8, fontSize: 13 }} />
                   <Legend wrapperStyle={{ fontSize: 13 }} />
                   {['特優', '優等', '佳作', '探究精神獎', '團隊合作獎', '鄉土教材獎', '參展'].map(a => (
-                    <Bar key={a} dataKey={a} stackId="award" fill={awardColors[a]} />
+                    <Bar key={a} dataKey={a} fill={awardColors[a]} radius={[4, 4, 0, 0]} />
                   ))}
                 </BarChart>
               </ResponsiveContainer>
