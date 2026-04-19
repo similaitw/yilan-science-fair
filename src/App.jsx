@@ -138,7 +138,7 @@ const authorData = {
   '030102': { authors: '魏津碩、林晨澔、蔡潤中', teachers: '賴麗如、賴志鴻' },
   '030103': { authors: '李以瑀、洪晟樺', teachers: '陳家齊' },
   '030104': { authors: '張竣嚴、曾佐恩、徐宏陞', teachers: '黃俊傑' },
-  '030105': { authors: '吳宸軒、鄭鈞學、盧苡葦', teachers: '陳建維' },
+  '030105': { authors: '吳宸軒、鄭鈞學、盧苡葦', teachers: '陳建淳' },
   '030106': { authors: '梁祐穎', teachers: '曾方琪、蘇畇喻' },
   '030107': { authors: '吳昱辰、黃程瀚、方艷如', teachers: '陳家彬' },
   '030108': { authors: '李宥丞、蔡筠筠', teachers: '陳家彬' },
