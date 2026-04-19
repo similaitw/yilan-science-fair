@@ -135,7 +135,7 @@ const MultiSelect = ({ options, selected, onChange, searchPlaceholder = false })
 const authorData = {
   // 國中
   '030101': { authors: '鄭宇晴、吳宥蓉', teachers: '黃俊傑' },
-  '030102': { authors: '魏津碩、林晨澔、蔡潤中', teachers: '賴麗如、賴忻旻' },
+  '030102': { authors: '魏津碩、林晨澔、蔡潤中', teachers: '賴麗如、賴志鴻' },
   '030103': { authors: '李以瑀、洪晟樺', teachers: '陳家齊' },
   '030104': { authors: '張竣嚴、曾佐恩、徐宏陞', teachers: '黃俊傑' },
   '030105': { authors: '吳宸軒、鄭鈞學、盧苡葦', teachers: '陳建維' },
