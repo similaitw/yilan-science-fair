@@ -345,7 +345,8 @@ export default function App() {
     groups: [],      // 多選：組別
     categories: [],  // 多選：科別
     awards: [],      // 多選：名次/獎項
-    schools: []      // 多選：學校名稱
+    schools: [],     // 多選：學校名稱
+    teachers: []     // 多選：指導老師
   });
 
   // 排序狀態
@@ -365,6 +366,27 @@ export default function App() {
   const awardWeights = { '特優': 1, '優等': 2, '佳作': 3, '探究精神獎': 4, '團隊合作獎': 5, '鄉土教材獎': 6, '參展': 7 };
   const uniqueAwards = [...new Set(rawData.map(item => item.award))].sort((a, b) => (awardWeights[a] || 99) - (awardWeights[b] || 99));
 
+  // 指導老師清單(拆分多位老師 + 去重)
+  const uniqueTeachers = useMemo(() => {
+    const set = new Set();
+    Object.values(authorData).forEach(v => {
+      if (!v?.teachers) return;
+      v.teachers.split(/[、,,\s]+/).forEach(t => {
+        const name = t.trim();
+        if (name && name !== '—') set.add(name);
+      });
+    });
+    return [...set].sort();
+  }, []);
+
+  // 判斷單筆作品是否包含任一指定老師
+  const itemMatchTeachers = (item, teachers) => {
+    if (teachers.length === 0) return true;
+    const raw = authorData[item.id]?.teachers || '';
+    const names = raw.split(/[、,,\s]+/).map(s => s.trim()).filter(Boolean);
+    return teachers.some(t => names.includes(t));
+  };
+
   // 多重條件篩選過濾資料
   const filteredData = useMemo(() => {
     return rawData.filter(item => {
@@ -372,7 +394,8 @@ export default function App() {
       const matchCategory = filters.categories.length === 0 || filters.categories.includes(item.category);
       const matchAward = filters.awards.length === 0 || filters.awards.includes(item.award);
       const matchSchool = filters.schools.length === 0 || filters.schools.includes(item.school);
-      return matchGroup && matchCategory && matchAward && matchSchool;
+      const matchTeacher = itemMatchTeachers(item, filters.teachers);
+      return matchGroup && matchCategory && matchAward && matchSchool && matchTeacher;
     });
   }, [filters]);
 
@@ -467,6 +490,26 @@ export default function App() {
       .slice(0, 10);
   }, [filteredData]);
 
+  // 圖表:指導老師獲獎數排行(排除「參展」,同一編號一件作品的老師各計 1)
+  const chartTopTeachers = useMemo(() => {
+    const counts = {};
+    const seen = new Set();
+    filteredData.forEach(d => {
+      if (d.award === '參展') return;
+      const key = `${d.id}|${d.award}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      const raw = authorData[d.id]?.teachers || '';
+      raw.split(/[、,,\s]+/).map(s => s.trim()).filter(Boolean).forEach(name => {
+        counts[name] = (counts[name] || 0) + 1;
+      });
+    });
+    return Object.entries(counts)
+      .map(([teacher, count]) => ({ teacher, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  }, [filteredData]);
+
   // 圖表 4:獎項分布圓餅(排除「參展」)
   const chartAwardPie = useMemo(() => {
     const counts = {};
@@ -555,7 +598,7 @@ export default function App() {
 
         {/* --- 全新單列式多重篩選條件區塊 --- */}
         <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             
             {/* 組別多選 */}
             <div className="flex flex-col relative">
@@ -598,11 +641,24 @@ export default function App() {
               <label className="text-sm font-medium text-gray-600 mb-1.5 flex items-center">
                 <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2"></span>學校名稱
               </label>
-              <MultiSelect 
+              <MultiSelect
                 options={uniqueSchools}
                 selected={filters.schools}
                 onChange={(newSchools) => setFilters(prev => ({ ...prev, schools: newSchools }))}
                 searchPlaceholder="請輸入學校關鍵字搜尋..."
+              />
+            </div>
+
+            {/* 指導老師多選 (含搜尋) */}
+            <div className="flex flex-col relative">
+              <label className="text-sm font-medium text-gray-600 mb-1.5 flex items-center">
+                <span className="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span>指導老師
+              </label>
+              <MultiSelect
+                options={uniqueTeachers}
+                selected={filters.teachers}
+                onChange={(newTeachers) => setFilters(prev => ({ ...prev, teachers: newTeachers }))}
+                searchPlaceholder="請輸入老師姓名搜尋..."
               />
             </div>
 
@@ -724,6 +780,24 @@ export default function App() {
                   <Bar dataKey="count" fill="#10b981" radius={[0, 6, 6, 0]} />
                 </BarChart>
               </ResponsiveContainer>
+            </div>
+
+            {/* 指導老師獲獎排行 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">指導老師獲獎排行 前 10 名(不含參展)</h2>
+              {chartTopTeachers.length > 0 ? (
+                <ResponsiveContainer width="100%" height={Math.max(300, chartTopTeachers.length * 36)}>
+                  <BarChart data={chartTopTeachers} layout="vertical" margin={{ left: 40 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                    <YAxis type="category" dataKey="teacher" tick={{ fontSize: 12 }} width={140} />
+                    <Tooltip contentStyle={{ borderRadius: 8, fontSize: 13 }} />
+                    <Bar dataKey="count" fill="#ec4899" radius={[0, 6, 6, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-sm text-gray-400">目前篩選條件下無得獎作品</p>
+              )}
             </div>
           </div>
         )}
