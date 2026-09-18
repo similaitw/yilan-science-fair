@@ -1,16 +1,23 @@
-# React + Vite
+# 宜蘭科展／發明展資料專案
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+本專案原有宜蘭科展資料分析頁面，並新增 2026 宜蘭縣青少年發明展之研究規劃。
 
-Currently, two official plugins are available:
+## 2026 發明展主題
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 路面低窪積水自動警示附牌
+結合既有「注意路面低窪」警告標誌之免電力可變警示裝置。
 
-## React Compiler
+- 完整研究說明書：[`docs/invention-lowspot-warning.md`](./docs/invention-lowspot-warning.md)
+- 網頁版：部署後請開啟 `/invention/`
+- 設計原則：國中生做得出、機構看得懂、數據量得到、問題真實
+- 第一代不使用 Arduino、電池或網路，先驗證浮力、槓桿放大、翻牌與自動復歸
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 開發
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+npm run build
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+本專案使用 React + Vite。
