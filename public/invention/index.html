@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0f4c5c" />
+  <title>路面低窪積水自動警示附牌｜宜蘭縣青少年發明展</title>
+  <meta name="description" content="國中生可製作的免電力低窪積水自動警示附牌：研究規劃、工程原理、材料成本、實驗方法與佐證資料。" />
+  <style>
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:#173042;background:#f4f8fa;line-height:1.75}
+    a{color:#086b88}
+    .wrap{max-width:1160px;margin:auto;padding:0 20px}
+    header{background:linear-gradient(135deg,#073b4c,#0f6f7d 60%,#1c9ab0);color:#fff;padding:58px 0 42px;position:relative;overflow:hidden}
+    header:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:#ffffff12;right:-100px;top:-150px}
+    .eyebrow{display:inline-block;background:#fff2;color:#fff;border:1px solid #ffffff55;padding:5px 12px;border-radius:999px;font-weight:700;font-size:14px}
+    h1{font-size:clamp(34px,6vw,64px);line-height:1.1;margin:16px 0 10px;letter-spacing:-.04em}
+    .subtitle{font-size:clamp(17px,2vw,24px);max-width:860px;margin:0 0 22px;color:#e5f5f7}
+    .hero-tags{display:flex;gap:10px;flex-wrap:wrap}
+    .hero-tags span{background:#fff;color:#12495a;border-radius:10px;padding:7px 12px;font-weight:800;font-size:14px}
+    nav{position:sticky;top:0;z-index:20;background:#ffffffed;backdrop-filter:blur(10px);border-bottom:1px solid #dce8ec}
+    nav .wrap{display:flex;gap:16px;overflow:auto;padding-top:10px;padding-bottom:10px}
+    nav a{white-space:nowrap;text-decoration:none;font-weight:700;color:#365866}
+    section{padding:58px 0}
+    section.alt{background:#fff}
+    h2{font-size:clamp(28px,4vw,40px);line-height:1.2;margin:0 0 14px;color:#113e4d}
+    h3{color:#134f60;margin-top:0}
+    .lead{font-size:18px;color:#47646f;max-width:900px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{background:#fff;border:1px solid #dce9ed;border-radius:18px;padding:22px;box-shadow:0 8px 24px #0b41530a}
+    .alt .card{background:#f8fbfc}
+    .span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
+    .kicker{font-size:13px;letter-spacing:.08em;font-weight:900;color:#d06b27;text-transform:uppercase}
+    .problem{border-left:5px solid #e17b37}
+    .solution{border-left:5px solid #0e879b}
+    .rule{border-left:5px solid #5e6ad2}
+    .good{border-left:5px solid #4f9d69}
+    .bad{border-left:5px solid #c8553d}
+    .bigquote{font-size:24px;font-weight:900;color:#143f4c;background:#eef7f9;border-radius:18px;padding:26px;margin:24px 0}
+    .diagram{background:linear-gradient(#eaf7fb 0 39%,#d4d6d1 39% 48%,#4b5960 48% 65%,#d8e6e9 65%);border-radius:20px;min-height:390px;position:relative;overflow:hidden;border:1px solid #cadde3}
+    .road-label,.walk-label{position:absolute;font-weight:900;color:#173c48;background:#ffffffdd;padding:4px 10px;border-radius:999px}
+    .road-label{left:25px;top:205px}.walk-label{right:25px;top:145px}
+    .sign{position:absolute;right:12%;top:32px;width:170px;text-align:center}
+    .triangle{width:110px;height:96px;margin:auto;background:#fff;clip-path:polygon(50% 0,100% 100%,0 100%);position:relative;filter:drop-shadow(0 2px 1px #3334)}
+    .triangle:before{content:"";position:absolute;inset:9px;background:#e34234;clip-path:polygon(50% 0,100% 100%,0 100%)}
+    .triangle:after{content:"⌣";position:absolute;inset:20px 0 0;font-size:60px;line-height:70px;color:#111;background:#fff;clip-path:polygon(50% 0,100% 100%,0 100%)}
+    .pole{width:8px;height:180px;background:#69787f;margin:auto}
+    .subplate{margin:8px auto 0;background:white;border:4px solid #222;color:#111;padding:9px 6px;width:160px;font-weight:900;transform-origin:top;transition:.45s transform,.45s opacity}
+    .subplate.hidden{transform:rotateX(90deg);opacity:.12}
+    .water{position:absolute;left:5%;bottom:113px;width:55%;height:18px;background:#4fc3e8aa;border-radius:50% 50% 20% 20%;transition:.35s height}
+    .gutter{position:absolute;left:8%;bottom:92px;width:55%;height:32px;background:#75cce7;border-radius:0 0 60% 20%;opacity:.75}
+    .sensor{position:absolute;right:31%;bottom:22px;width:72px;height:170px;border:5px solid #5b7680;border-top:0;background:#aee6f34a;border-radius:0 0 12px 12px}
+    .float{position:absolute;width:44px;height:44px;border-radius:50%;background:#f2a33c;left:9px;bottom:10px;box-shadow:inset -8px -6px #d87919;transition:.35s bottom}
+    .tube{position:absolute;right:36%;bottom:88px;width:140px;height:8px;background:#68bcd2;transform:rotate(-7deg);transform-origin:right}
+    .caption{position:absolute;left:20px;bottom:16px;background:#fff;padding:8px 12px;border-radius:10px;font-size:13px;max-width:290px}
+    .sim{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center}
+    input[type=range]{width:100%;accent-color:#0d8296}
+    .meter{font-size:54px;font-weight:900;color:#0d6f82}
+    .status{display:inline-block;border-radius:999px;padding:8px 14px;font-weight:900}
+    .status.green{background:#dcf6e5;color:#237342}.status.yellow{background:#fff1b8;color:#8a6100}.status.red{background:#ffe0db;color:#a63925}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #dce8ec}
+    th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e7eef1;vertical-align:top}
+    th{background:#e9f3f6;color:#214a59}
+    .steps{counter-reset:n}
+    .step{position:relative;padding-left:54px;margin:24px 0}
+    .step:before{counter-increment:n;content:counter(n);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#0b7f91;color:#fff;font-weight:900}
+    .source{font-size:14px;color:#496570}
+    .source a{word-break:break-all}
+    .footer{background:#092f3a;color:#d8edf2;padding:38px 0}
+    .notice{background:#fff6e8;border:1px solid #f2ca8a;color:#6c4a14;padding:16px 18px;border-radius:14px}
+    .pill{display:inline-block;background:#e8f4f6;color:#176275;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:800;margin:3px}
+    @media(max-width:800px){
+      .span4,.span6,.span8{grid-column:span 12}
+      .sim{grid-template-columns:1fr}
+      .diagram{min-height:430px}
+      .sign{right:4%}
+      .sensor{right:37%}
+      .tube{right:43%;width:90px}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="eyebrow">宜蘭縣青少年發明展｜國中組概念提案 v1.0</span>
+    <h1>路面低窪積水<br>自動警示附牌</h1>
+    <p class="subtitle">結合既有「注意路面低窪」警告標誌，以實際積水本身的浮力，自動翻出「積水請減速」附牌。先做得出、量得到，再談道路實用化。</p>
+    <div class="hero-tags"><span>0 W 外部用電</span><span>固定低窪點</span><span>國中生可製作</span><span>可做量化實驗</span></div>
+  </div>
+</header>
+
+<nav><div class="wrap">
+  <a href="#why">問題</a><a href="#idea">設計</a><a href="#sim">模擬</a><a href="#scope">放哪裡</a><a href="#experiment">實驗</a><a href="#materials">材料成本</a><a href="#rules">法規</a><a href="#evidence">佐證</a><a href="#qa">答辯</a>
+</div></nav>
+
+<section id="why">
+  <div class="wrap">
+    <div class="kicker">Problem first</div><h2>不是重新發明一塊牌，而是讓既有警告知道「現在真的積水了」</h2>
+    <p class="lead">固定的「注意路面低窪」可以告訴駕駛前方地形可能低窪，但不能反映雨天當下是否已形成積水。本研究鎖定的正是這個時間差。</p>
+    <div class="grid">
+      <div class="card span4 problem"><h3>行人潑濺</h3><p>車輪通過路側積水，可能將水花濺向人行道、候車區、機車騎士或學生。</p></div>
+      <div class="card span4 problem"><h3>視線干擾</h3><p>交通安全資料提醒，前車或對向車通過積水區濺起的水花可能短暫影響駕駛視線。</p></div>
+      <div class="card span4 problem"><h3>固定牌不知道現況</h3><p>晴天與真正積水時看到的是同一面固定牌；本作品希望補上「此刻正在積水」的訊息。</p></div>
+    </div>
+    <div class="bigquote">研究問題：能不能不用電池、不用網路，讓低窪處的「實際積水」自己把警示附牌翻出來？</div>
+  </div>
+</section>
+
+<section class="alt" id="idea">
+  <div class="wrap">
+    <div class="kicker">Concept</div><h2>第一代只做五件事</h2>
+    <div class="grid">
+      <div class="card span4 solution"><h3>① 取水</h3><p>低窪積水透過小孔或透明連通管進入感測筒。</p></div>
+      <div class="card span4 solution"><h3>② 浮起</h3><p>乒乓球或保麗龍浮筒隨水位上升。</p></div>
+      <div class="card span4 solution"><h3>③ 放大</h3><p>槓桿把1～3公分的小位移，轉成明顯的牌面翻轉角度。</p></div>
+      <div class="card span6 solution"><h3>④ 顯示</h3><p>達到門檻時，附牌翻出「積水請減速」；主標誌仍維持既有低窪警告概念。</p></div>
+      <div class="card span6 solution"><h3>⑤ 復歸</h3><p>水退後利用重力或小配重自行收回，不必人工重新設定。</p></div>
+    </div>
+
+    <div style="margin-top:26px" class="diagram" aria-label="低窪積水自動警示附牌概念圖">
+      <div class="road-label">車道低窪處</div><div class="walk-label">人行道</div>
+      <div class="water" id="water"></div><div class="gutter"></div>
+      <div class="tube"></div>
+      <div class="sensor"><div class="float" id="float"></div></div>
+      <div class="sign">
+        <div class="triangle"></div>
+        <div class="subplate hidden" id="plate">積水請減速</div>
+        <div class="pole"></div>
+      </div>
+      <div class="caption">概念示意：低窪處積水 → 連通管 → 浮筒上升 → 槓桿／連桿 → 附牌翻出。正式道路設置仍須主管機關審查。</div>
+    </div>
+  </div>
+</section>
+
+<section id="sim">
+  <div class="wrap">
+    <div class="kicker">Concept simulator</div><h2>先用水深理解觸發概念</h2>
+    <div class="card sim">
+      <div>
+        <label for="depth"><strong>模擬積水深度</strong></label>
+        <input id="depth" type="range" min="0" max="40" value="5" step="1" />
+        <div class="meter"><span id="depthValue">5</span> mm</div>
+        <p id="statusText"><span class="status green">未啟動</span></p>
+        <p>這只是機構說明器，<strong>不是正式研究數據</strong>。真正門檻必須等玩具車潑濺實驗與可靠度測試後再決定。</p>
+      </div>
+      <div>
+        <h3>假設性示範門檻</h3>
+        <p><span class="pill">0–14 mm：收合</span><span class="pill">15–24 mm：準備啟動</span><span class="pill">25 mm以上：翻出附牌</span></p>
+        <p>正式研究不能先說「25 mm就是危險」。這個數字只讓學生理解如何校正機構。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="scope">
+  <div class="wrap">
+    <div class="kicker">Where to use</div><h2>一個固定低窪點，一組裝置；不是整條路到處裝</h2>
+    <div class="grid">
+      <div class="card span6 good"><h3>適合</h3><p>校門口旁固定低窪車道、公車站旁反覆積水點、行穿線附近低窪處、人行道旁車道低點、已知雨天會積水且需要提前減速的局部位置。</p></div>
+      <div class="card span6 bad"><h3>不適合</h3><p>大範圍淹水、地下道深水、高速公路、整條道路排水不良，或已達需要封路程度的情境。這些應優先改善排水或採更高等級管制。</p></div>
+    </div>
+    <div class="notice" style="margin-top:18px"><strong>工程底線：</strong>如果需要沿著一整條街每10公尺裝一個，這個方案就失去意義；本作品只服務「已知、固定、反覆發生」的小範圍低窪點。</div>
+  </div>
+</section>
+
+<section id="experiment">
+  <div class="wrap">
+    <div class="kicker">Experiments</div><h2>發明展真正要比的是數據，不是把模型做漂亮</h2>
+    <div class="grid">
+      <div class="card span6"><h3>實驗一｜水深 × 啟動</h3><p>0、5、10、15、20、25、30、40 mm，各做至少5次。記錄啟動水深、附牌角度、反應時間與復歸水深。</p></div>
+      <div class="card span6"><h3>實驗二｜水深 × 水花</h3><p>固定同一輛玩具車、同一斜坡高度，改變積水深度；以方格背景與手機慢動作影片量測最大水花高度及水平距離。</p></div>
+      <div class="card span6"><h3>實驗三｜速度 × 水花</h3><p>若時間足夠，以不同斜坡高度改變模型車速度，觀察同一水深下潑濺差異。模型結果只解釋趨勢，不直接換算真實時速。</p></div>
+      <div class="card span6"><h3>實驗四｜30～50次可靠度</h3><p>重複「加水→啟動→排水→復歸」，記錄成功率、卡住率與啟動水深變異，證明不是只成功一次。</p></div>
+    </div>
+    <h3 style="margin-top:30px">建議紀錄表</h3>
+    <div style="overflow:auto"><table>
+      <thead><tr><th>水深</th><th>啟動？</th><th>牌面角度</th><th>反應時間</th><th>水花高度</th><th>水花距離</th><th>復歸？</th></tr></thead>
+      <tbody><tr><td>待實測</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="alt" id="materials">
+  <div class="wrap">
+    <div class="kicker">Buildability</div><h2>國中生原型：預算約 NT$570～1,500</h2>
+    <div style="overflow:auto"><table>
+      <thead><tr><th>項目</th><th>可用材料</th><th>估計成本</th></tr></thead>
+      <tbody>
+        <tr><td>道路／底板</td><td>PP板、PVC板、瓦楞板</td><td>100～200</td></tr>
+        <tr><td>透明水槽</td><td>整理盒、壓克力盒</td><td>100～250</td></tr>
+        <tr><td>感測筒</td><td>壓克力管、大型針筒筒身</td><td>50～150</td></tr>
+        <tr><td>浮筒</td><td>乒乓球、保麗龍球</td><td>20～50</td></tr>
+        <tr><td>連通管</td><td>透明矽膠管</td><td>50～100</td></tr>
+        <tr><td>連桿／軸心</td><td>竹筷、壓克力棒、鐵絲、M3螺絲</td><td>100～250</td></tr>
+        <tr><td>附牌</td><td>PP板、厚紙板、反光貼紙</td><td>100～200</td></tr>
+        <tr><td>密封</td><td>熱熔膠、矽利康</td><td>50～100</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="steps">
+      <div class="step"><h3>先做感測筒</h3><p>確定加水後浮筒能順暢上下，不卡壁。</p></div>
+      <div class="step"><h3>再做放大槓桿</h3><p>研究1～3公分位移如何轉成明顯翻牌角度。</p></div>
+      <div class="step"><h3>加入重力復歸</h3><p>排水後附牌能自己收回。</p></div>
+      <div class="step"><h3>最後才美化</h3><p>結構穩定、數據完整後，再加反光貼紙與模型場景。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="wrap">
+    <div class="kicker">Rules & engineering boundary</div><h2>正式道路不能自己改牌；參賽作品是「技術原型」</h2>
+    <div class="grid">
+      <div class="card span4 rule"><h3>既有低窪警告</h3><p>現行道路警告標誌中已有「注意路面低窪（警32）」。本作品不主張另創一種官方交通標誌。</p></div>
+      <div class="card span4 rule"><h3>可變性概念</h3><p>現行規則也有「可變性標誌」概念，可依需要以人工、遙控或自動方式顯示。</p></div>
+      <div class="card span4 rule"><h3>附牌</h3><p>主標誌無法完全表達目的或作說明時，可有附牌；真正道路如何增設，仍須主管機關核定。</p></div>
+    </div>
+    <div class="notice" style="margin-top:18px">參賽答法：我們驗證的是「由實際淺積水驅動的免電力可變附牌機構」。實際道路使用還要做視距、耐候、防撞、維護及法規審查。</div>
+  </div>
+</section>
+
+<section class="alt" id="evidence">
+  <div class="wrap">
+    <div class="kicker">Evidence</div><h2>新聞與官方資料：把研究動機接起來</h2>
+    <div class="grid">
+      <div class="card span6"><h3>官方法規｜道路標誌、附牌、可變性標誌</h3><p class="source"><a target="_blank" rel="noopener" href="https://www.mvdis.gov.tw/webMvdisLaw/LawArticle.aspx?LawID=A0011025">電子公路監理網－道路交通標誌標線號誌設置規則</a></p></div>
+      <div class="card span6"><h3>官方安全資料｜雨天水花影響視線</h3><p class="source"><a target="_blank" rel="noopener" href="https://www.freeway.gov.tw/northern/Print.aspx?cnid=734&p=43670">交通部高速公路局雨天行車安全資料</a></p></div>
+      <div class="card span6"><h3>影音新聞｜積水水花波及用路人</h3><p class="source"><a target="_blank" rel="noopener" href="https://news.tvbs.com.tw/local/4014621">TVBS：汽機車行經積水路段、水花潑濺案例</a></p></div>
+      <div class="card span6"><h3>宜蘭案例｜冬山、羅東、五結道路積水</h3><p class="source"><a target="_blank" rel="noopener" href="https://news.tvbs.com.tw/local/3042504">TVBS：宜蘭豪雨道路積水案例</a></p></div>
+      <div class="card span6"><h3>現場應變｜人工警示</h3><p class="source"><a target="_blank" rel="noopener" href="https://www.cna.com.tw/news/aloc/202507090057.aspx">中央社：積水路段警示燈、三角錐等現場處理</a></p></div>
+      <div class="card span6"><h3>使用原則</h3><p>新聞證明「問題存在」；官方法規與安全資料支撐「減速警示有合理需求」。不以單一新聞推論水花必然造成事故。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="qa">
+  <div class="wrap">
+    <div class="kicker">Judge Q&A</div><h2>評審最可能問的問題</h2>
+    <div class="grid">
+      <div class="card span6"><h3>固定寫「易積水」不就好了？</h3><p>固定牌只能說這裡可能積水。本作品想補上「現在真的已達設定水深」的現況資訊。</p></div>
+      <div class="card span6"><h3>浮球不是早就有？</h3><p>對，所以不把浮球本身當發明。研究重點是淺水位移放大、既有標誌的附加式可變警示、自動復歸與門檻驗證。</p></div>
+      <div class="card span6"><h3>為什麼不用Arduino？</h3><p>電子式可以更精密；本題刻意研究免電池、免網路、低成本且停電仍能工作的被動式機構。</p></div>
+      <div class="card span6"><h3>到底幾公分才警示？</h3><p>不先猜。先做水深與潑濺實驗，再用數據決定適合原型的啟動門檻。</p></div>
+      <div class="card span6"><h3>能直接裝在馬路嗎？</h3><p>不能自行安裝。參賽原型先驗證機構；真實道路必須經主管機關完成結構、視距、耐候與法規審查。</p></div>
+      <div class="card span6"><h3>如果整條路都淹？</h3><p>那不是本作品的適用範圍，應改善排水或採道路封閉等更高層級措施。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Success criteria</div><h2>第一代做到這五件事，就值得繼續</h2>
+    <div class="grid">
+      <div class="card span4 good"><strong>✓ 不用電能啟動</strong></div>
+      <div class="card span4 good"><strong>✓ 水升能清楚翻牌</strong></div>
+      <div class="card span4 good"><strong>✓ 水退能自行復歸</strong></div>
+      <div class="card span6 good"><strong>✓ 連續30～50次操作可靠</strong></div>
+      <div class="card span6 good"><strong>✓ 有水深／水花實驗支持警示門檻</strong></div>
+    </div>
+    <div class="bigquote">先求機構會動、數據量得到、結果可重複，再追求外觀漂亮。</div>
+  </div>
+</section>
+
+<div class="footer"><div class="wrap">
+  <strong>宜蘭縣青少年發明展｜國中組研究規劃</strong><br>
+  <span>版本 v1.0｜題目仍可依第一代原型與撞題檢索結果微調。</span>
+</div></div>
+
+<script>
+  const depth = document.getElementById('depth');
+  const value = document.getElementById('depthValue');
+  const statusText = document.getElementById('statusText');
+  const float = document.getElementById('float');
+  const plate = document.getElementById('plate');
+  const water = document.getElementById('water');
+  function update(){
+    const d = Number(depth.value);
+    value.textContent = d;
+    const y = Math.min(105, 10 + d * 2.3);
+    float.style.bottom = y + 'px';
+    water.style.height = Math.max(7, d * .8) + 'px';
+    if(d >= 25){
+      plate.classList.remove('hidden');
+      statusText.innerHTML = '<span class="status red">附牌翻出</span>';
+    } else if(d >= 15){
+      plate.classList.add('hidden');
+      statusText.innerHTML = '<span class="status yellow">接近假設門檻</span>';
+    } else {
+      plate.classList.add('hidden');
+      statusText.innerHTML = '<span class="status green">未啟動</span>';
+    }
+  }
+  depth.addEventListener('input',update); update();
+</script>
+</body>
+</html>
